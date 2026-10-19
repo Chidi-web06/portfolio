@@ -601,6 +601,29 @@ input, textarea { font-family: inherit; }
   .flow__arrow { transform: rotate(90deg); align-self: center; }
 }
 
+.wa-fab { position: fixed; right: 22px; bottom: 22px; z-index: 200; width: 60px; height: 60px; display: grid; place-items: center; border: 0; border-radius: 50%; color: #fff; background: #25D366; box-shadow: 0 8px 24px rgba(0,0,0,.45); cursor: pointer; animation: wa-pulse 2.6s infinite; }
+.wa-fab:hover { transform: scale(1.08); }
+.wa-fab svg { width: 30px; height: 30px; }
+@keyframes wa-pulse {
+  0% { box-shadow: 0 8px 24px rgba(0,0,0,.45), 0 0 0 0 rgba(37,211,102,.45); }
+  70% { box-shadow: 0 8px 24px rgba(0,0,0,.45), 0 0 0 16px rgba(37,211,102,0); }
+  100% { box-shadow: 0 8px 24px rgba(0,0,0,.45), 0 0 0 0 rgba(37,211,102,0); }
+}
+.wa-card { position: fixed; right: 22px; bottom: 94px; z-index: 200; width: min(320px, calc(100vw - 44px)); overflow: hidden; border: 1px solid var(--border); border-radius: 12px; color: var(--text-hi); background: var(--elevated); box-shadow: 0 16px 48px rgba(0,0,0,.55); opacity: 0; pointer-events: none; transform: translateY(12px) scale(.97); transition: opacity .25s var(--ease), transform .25s var(--ease); }
+.wa-card.is-open { opacity: 1; pointer-events: auto; transform: none; }
+.wa-card__head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; color: #fff; background: #075E54; }
+.wa-card__head img { width: 40px; height: 40px; border: 2px solid rgba(255,255,255,.5); border-radius: 50%; object-fit: cover; }
+.wa-card__who { font-weight: 700; font-size: 14px; line-height: 1.2; }
+.wa-card__status { font-size: 12px; opacity: .8; }
+.wa-card__body { padding: 16px; }
+.wa-card__hint { margin-bottom: 14px; padding: 10px 12px; border-radius: 8px; color: var(--text-mid); background: var(--elevated-2); font-size: 13px; }
+.wa-card label { display: block; margin-bottom: 5px; color: var(--text-low); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; }
+.wa-card input, .wa-card textarea { width: 100%; margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; color: var(--text-hi); background: var(--elevated-2); font: 14px var(--font-body); }
+.wa-card input:focus, .wa-card textarea:focus { outline: none; border-color: #25D366; }
+.wa-send { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border: 0; border-radius: 6px; color: #fff; background: #25D366; font-weight: 600; cursor: pointer; }
+.wa-send:hover { background: #1EBE5B; }
+@media (prefers-reduced-motion: reduce) { .wa-fab { animation: none; } }
+
 </style>
 </head>
 <body>
@@ -937,6 +960,24 @@ input, textarea { font-family: inherit; }
   </div>
 </footer>
 
+<div class="wa-card" id="waCard" role="dialog" aria-label="Chat on WhatsApp" aria-hidden="true">
+  <div class="wa-card__head">
+    <img src="assets/img/chidi-photo.jpeg" alt="Chidi">
+    <div><div class="wa-card__who">Chidi</div><div class="wa-card__status">Typically replies within minutes</div></div>
+  </div>
+  <div class="wa-card__body">
+    <p class="wa-card__hint">Hi there! Tell me your name and I'll continue with you on WhatsApp.</p>
+    <label for="waName">Your name</label>
+    <input type="text" id="waName" maxlength="60" placeholder="e.g. John" autocomplete="name">
+    <label for="waMsg">Message (optional)</label>
+    <textarea id="waMsg" rows="2" maxlength="300" placeholder="I need a website for my business..."></textarea>
+    <button type="button" class="wa-send" id="waSend">Continue to WhatsApp</button>
+  </div>
+</div>
+<button type="button" class="wa-fab" id="waFab" aria-label="Contact me on WhatsApp" aria-expanded="false" aria-controls="waCard">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.33 4.95L2 22l5.29-1.39a9.87 9.87 0 0 0 4.75 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Zm0 18.02c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.05-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.25-8.24 8.25Zm4.52-6.16c-.25-.13-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-2-1.23-.73-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.6.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29Z"/></svg>
+</button>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -1068,6 +1109,45 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+(() => {
+  const number = '2348084508767';
+  const fab = document.getElementById('waFab');
+  const card = document.getElementById('waCard');
+  const nameInput = document.getElementById('waName');
+  const messageInput = document.getElementById('waMsg');
+
+  function closeCard() {
+    card.classList.remove('is-open');
+    card.setAttribute('aria-hidden', 'true');
+    fab.setAttribute('aria-expanded', 'false');
+  }
+
+  fab.addEventListener('click', () => {
+    const isOpen = card.classList.toggle('is-open');
+    card.setAttribute('aria-hidden', String(!isOpen));
+    fab.setAttribute('aria-expanded', String(isOpen));
+    if (isOpen) nameInput.focus();
+  });
+
+  document.addEventListener('click', event => {
+    if (card.classList.contains('is-open') && !card.contains(event.target) && !fab.contains(event.target)) closeCard();
+  });
+
+  function sendMessage() {
+    const name = nameInput.value.trim();
+    if (!name) { nameInput.focus(); return; }
+    const extra = messageInput.value.trim();
+    const text = `Hi Chidi! I'm ${name}.${extra ? ` ${extra}` : ' I found your portfolio and would like to talk about a project.'}`;
+    window.open(`https://wa.me/${number}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    closeCard();
+  }
+
+  document.getElementById('waSend').addEventListener('click', sendMessage);
+  nameInput.addEventListener('keydown', event => { if (event.key === 'Enter') sendMessage(); });
+  messageInput.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); } });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') closeCard(); });
+})();
 
 </script>
 </body>
